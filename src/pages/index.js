@@ -1,0 +1,6 @@
+export * from './PageHome'
+export * from './PageContador'
+export * from './PagePersonajes'
+export * from './PageTextos'
+export * from './PageTextosSecundarios'
+export * from './PagePlanetas'
