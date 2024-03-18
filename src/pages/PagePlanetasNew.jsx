@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { TablaRegistros } from '../components/Table/TablaRegistros'
 import { usePlanetas } from '../hooks/usePlanetas'
 
-export const PagePlanetas = () => {
+export const PagePlanetasNew = () => {
 
     const {planetas,columnaspl, obtenerPlanetas} = usePlanetas()
 

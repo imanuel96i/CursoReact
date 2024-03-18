@@ -14,6 +14,5 @@ export const requestAPI = async (metodo, url, body=null) => {
     )
     
     const response = await responseJson.json();
-    console.log(response)
     return response
 }
