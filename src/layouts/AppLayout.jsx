@@ -1,7 +1,10 @@
 import { AppBar, Box, Button, IconButton, Toolbar, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import MenuIcon from '@mui/icons-material/Menu';
+import { usePlanetas } from '../hooks/usePlanetas';
+import { usePersonajes } from '../hooks/usePersonajes';
+import { loading } from '../assets';
 
 export const AppLayout = ({ children }) => {
     
@@ -18,13 +21,14 @@ export const AppLayout = ({ children }) => {
                         <Button color='inherit' onClick={()=> navigate('home')}>Inicio</Button>
                         <Button color='inherit' onClick={()=> navigate('personajes')}>Personajes DBZ</Button>
                         <Button color='inherit' onClick={()=> navigate('planetas')}>Planetas DBZ</Button>
+                        <Button color='inherit' onClick={()=> navigate('planetasnew')}>Planetas DBZ NEW</Button>
                         <Button color='inherit' onClick={()=> navigate('contador')}>Contador</Button>
                         <Button color='inherit' onClick={()=> navigate('textos')}>Textos</Button>
-                        <Button color='inherit' onClick={()=> navigate('textossecundarios')}>Textos Secundarios</Button>
+                        <Button color='inherit' onClick={() => navigate('textossecundarios')}>Textos Secundarios</Button>
                     </Toolbar>
                 </AppBar>
             </Box>
-            <div style={{marginTop: "5%"}}>
+            <div style={{ marginTop: "5%" }}>
                 {children}
             </div>
         </>
