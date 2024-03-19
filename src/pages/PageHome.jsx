@@ -7,41 +7,23 @@ import {loading} from '../assets'
 
 export const PageHome = () => {
 
-    const {personajes,columnaspj} = usePersonajes()
-    const { planetas, columnaspl } = usePlanetas()
-    const [data, setData] = useState([])
-    const [dataColumn, setDataColumn] = useState([])
-    const [titulo, setTitulo] = useState("Personajes")
+    const {personajes,columnaspj, obtenerPersonajes} = usePersonajes()
+    const { planetas, columnaspl, obtenerPlanetas} = usePlanetas()
+    const [tipo, setTipo] = useState(1)
+    
+    const getData = async () => {
+        const responsePlanetas = planetas === null ? await obtenerPlanetas() : planetas
+        if (personajes === null) obtenerPersonajes(responsePlanetas);
+    }
 
     useEffect(() => {
-        const newPersonajes = personajes?.map(p => ({
-            ...p, planeta: p.race === "Saiyan" ? planetas?.filter(p => p.name === "Tierra")[0].image : 
-                            p.race === "Namekian" ? planetas?.filter(p => p.name === "Namek")[0].image : 
-                            p.race === "Human" ? planetas?.filter(p => p.name === "Tierra")[0].image :
-                            p.race === "Frieza Race" ? planetas?.filter(p => p.name === "Freezer No. 79")[0].image : 
-                            p.race === "Android" ? planetas?.filter(p => p.name === "Tierra")[0].image : ""
-        }))
-        setData(newPersonajes)
-        setDataColumn(columnaspj)
+        getData()
     }, [])
 
 
-    const ClickPersonajes = () => {
-        const newPersonajes = personajes?.map(p => ({
-            ...p, planeta: p.race === "Saiyan" ? planetas?.filter(p => p.name === "Tierra")[0].image : 
-                            p.race === "Namekian" ? planetas?.filter(p => p.name === "Namek")[0].image : 
-                            p.race === "Human" ? planetas?.filter(p => p.name === "Tierra")[0].image :
-                            p.race === "Frieza Race" ? planetas?.filter(p => p.name === "Freezer No. 79")[0].image : 
-                            p.race === "Android" ? planetas?.filter(p => p.name === "Tierra")[0].image : ""
-        }))
-        setData(newPersonajes)
-        setDataColumn(columnaspj)
-        setTitulo("Personajes")
-    }
+    const ClickPersonajes = () => setTipo(1)
 
-    const ClickPlanetas = () => {
-        setData(planetas), setDataColumn(columnaspl),  setTitulo("Planetas")
-    }
+    const ClickPlanetas = () => setTipo(2)
 
     return (
         <div className='grid-container'>
@@ -53,10 +35,10 @@ export const PageHome = () => {
                 <Button variant='contained' onClick={()=>ClickPlanetas()}>Planetas</Button>
             </div>
             <div className="item2">
-                <h2>Listado de {titulo}</h2>
+                <h2>Listado de {tipo===1 ? "Personajes" : "Planetas"}</h2>
                 <div className='table'>
-                    {dataColumn === null ? <img src={ loading } alt="loading" style={{alignContent: "center"}}/>: 
-                    <TablaRegistros colummnas={dataColumn} data={data} />}
+                    {personajes === null || planetas === null ? <img src={ loading } alt="loading" style={{alignContent: "center"}}/>: 
+                    <TablaRegistros colummnas={tipo===1 ? columnaspj : columnaspl} data={tipo===1 ? personajes: planetas} />}
                 </div>
             </div>
         </div>

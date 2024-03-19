@@ -34,15 +34,19 @@ export const usePlanetas = () => {
         ]
     )
 
+    const listaPlanetas = useMemo(() => {
+        return {lista} ? lista : null
+    })
+
     const obtenerPlanetas = async () => {
         const response = await requestAPI('GET', import.meta.env.VITE_APP_URL_PLANETAS)
-        setPlanetas(response.items)
         dispatch(setList({ lista: response.items.map(p => ({ ...p, isDestroyed: p.isDestroyed ? "Si" : "No" })), message: "OK" }))
+        return response.items
     }
 
     return {
         obtenerPlanetas,
-        planetas: lista,
+        planetas: listaPlanetas,
         columnaspl
     }
 }

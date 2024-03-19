@@ -46,14 +46,26 @@ export const usePersonajes = () => {
         ]
     )
 
-    const obtenerPersonajes = async () => {
+    const obtenerPersonajes = async (planetas) => {
         const response = await requestAPI('GET', import.meta.env.VITE_APP_URL_PERSONAJES)
-        dispatch(setList({ lista: response.items, message: "OK" }))
+        const { items } = response
+        const newPersonajes = items?.map(p => ({
+            ...p, planeta: p.race === "Saiyan" ? planetas?.filter(p => p.name === "Tierra")[0].image : 
+                            p.race === "Namekian" ? planetas?.filter(p => p.name === "Namek")[0].image : 
+                            p.race === "Human" ? planetas?.filter(p => p.name === "Tierra")[0].image :
+                            p.race === "Frieza Race" ? planetas?.filter(p => p.name === "Freezer No. 79")[0].image : 
+                            p.race === "Android" ? planetas?.filter(p => p.name === "Tierra")[0].image : ""
+        }))
+        dispatch(setList({ lista: newPersonajes, message: "OK" }))
     }
+
+    const listaPersonajes = useMemo(() => {
+        return {lista} ? lista : null
+    })
 
     return {
         obtenerPersonajes,
-        personajes: lista,
+        personajes: listaPersonajes,
         columnaspj
         
     }
