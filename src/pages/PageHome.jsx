@@ -3,32 +3,27 @@ import { TablaRegistros } from '../components/Table/TablaRegistros'
 import { usePersonajes } from '../hooks/usePersonajes'
 import { usePlanetas } from '../hooks/usePlanetas'
 import { Button } from '@mui/material'
+import {loading} from '../assets'
 
 export const PageHome = () => {
 
     const {personajes,columnaspj, obtenerPersonajes} = usePersonajes()
-    const { planetas, columnaspl, obtenerPlanetas } = usePlanetas()
-    const [data, setData] = useState([])
-    const [dataColumn, setDataColumn] = useState([])
-    const [titulo, setTitulo] = useState("Personajes")
-
-    useEffect(() => {
-        obtenerPersonajes()
-        obtenerPlanetas()
-    },[])
-
-    useEffect(() => {
-        setData(personajes)
-        setDataColumn(columnaspj)
-    },[personajes])
-
-    const ClickPersonajes = () => {
-        setData(personajes), setDataColumn(columnaspj), setTitulo("Personajes")
+    const { planetas, columnaspl, obtenerPlanetas} = usePlanetas()
+    const [tipo, setTipo] = useState(1)
+    
+    const getData = async () => {
+        const responsePlanetas = planetas === null ? await obtenerPlanetas() : planetas
+        if (personajes === null) obtenerPersonajes(responsePlanetas);
     }
 
-    const ClickPlanetas = () => {
-        setData(planetas), setDataColumn(columnaspl),  setTitulo("Planetas")
-    }
+    useEffect(() => {
+        getData()
+    }, [])
+
+
+    const ClickPersonajes = () => setTipo(1)
+
+    const ClickPlanetas = () => setTipo(2)
 
     return (
         <div className='grid-container'>
@@ -40,9 +35,10 @@ export const PageHome = () => {
                 <Button variant='contained' onClick={()=>ClickPlanetas()}>Planetas</Button>
             </div>
             <div className="item2">
-                <h2>Listado de {titulo}</h2>
+                <h2>Listado de {tipo===1 ? "Personajes" : "Planetas"}</h2>
                 <div className='table'>
-                    <TablaRegistros colummnas={dataColumn} data={data} />
+                    {personajes === null || planetas === null ? <img src={ loading } alt="loading" style={{alignContent: "center"}}/>: 
+                    <TablaRegistros colummnas={tipo===1 ? columnaspj : columnaspl} data={tipo===1 ? personajes: planetas} />}
                 </div>
             </div>
         </div>
